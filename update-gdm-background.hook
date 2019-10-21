@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = myBF-arc-gtk-theme
+Target = gnome-shell
+
+[Action]
+Description = ...Updating GDM theme
+When = PostTransaction
+Exec = /usr/share/gnome-shell/update-gdm-background

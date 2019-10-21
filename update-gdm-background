@@ -1,0 +1,49 @@
+#!/bin/bash
+GST=/usr/share/gnome-shell/gnome-shell-theme.gresource
+ORIGIN=/usr/share/gnome-shell/
+WORKDIR=/tmp
+DEST=gnome-shell-theme.gresource.xml
+
+for r in `gresource list $GST`; do
+	r=${r#\/org\/gnome\/shell/}
+	if [ ! -d $WORKDIR/${r%/*} ]; then
+	  mkdir -p $WORKDIR/${r%/*}
+	fi
+done
+
+for r in `gresource list $GST`; do
+        gresource extract $GST $r >$WORKDIR/${r#\/org\/gnome\/shell/}
+done
+
+cp $ORIGIN/newbackground.png $WORKDIR/theme/
+cp $ORIGIN/noise-texture.png $WORKDIR/theme/
+cd $WORKDIR/theme
+
+cat > $DEST << EOF 
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/shell/theme">
+EOF
+
+find * -type f | while read a
+  do echo '    <file>'$a'</file>' >> $DEST
+done
+
+cat >> $DEST << EOF 
+  </gresource>
+</gresources>
+EOF
+
+sed -i -e 's/#1b6acb/#b2161d/gI' gnome-shell.css
+sed -i -e 's/#185fb4/#b2161d/gI' gnome-shell.css
+sed -i -e 's/#1f76e1/#b2161d/gI' gnome-shell.css
+sed -i -e 's/#15539e/#b2161d/gI' gnome-shell.css
+
+sed -i -e 's/noise-texture/newbackground/gI' gnome-shell.css
+
+sed -i '/newbackground/a \ \ background-position: 0px 0px;' gnome-shell.css 
+sed -i '/newbackground/a \ \ background-attachment: fixed;' gnome-shell.css 
+
+
+glib-compile-resources gnome-shell-theme.gresource.xml
+sudo cp gnome-shell-theme.gresource /usr/share/gnome-shell/gnome-shell-theme.gresource
