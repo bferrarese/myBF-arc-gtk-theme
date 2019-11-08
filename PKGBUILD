@@ -12,8 +12,8 @@ pkgdesc="A flat theme with transparent elements for GTK 3, GTK 2 and Gnome-Shell
 replaces=('arc-gtk-theme' 'gtk-theme-arc')
 provides=('arc-gtk-theme')
 conflicts=('arc-gtk-theme')
-pkgver=20190917
-pkgrel=8
+pkgver=$(date +%Y%m%d)
+pkgrel=11
 groups=('mypkgs')
 arch=('any')
 url="https://github.com/arc-design/arc-theme"
@@ -28,14 +28,14 @@ source=("git+${url}")
 sha512sums=('SKIP')
 
 prepare() {
-    # find ./${_pkgname}/common/ -type f -exec sed -i'' -e 's/#5294e2/#ff3333/gI'  {} \; ;
-    sed -i 's/#5294e2/#ff3333/gI' ${_pkgname}/common/gnome-shell/3.32/sass/_colors.scss
-    sed -i 's/center top/0px 0px/' ${_pkgname}/common/gnome-shell/3.32/sass/_common.scss
+    find ./${_pkgname}/common/ -type f -exec sed -i'' -e 's/#5294e2/#ff3333/gI'  {} \; ;
+    # sed -i 's/#5294e2/#ff3333/gI' ${_pkgname}/common/gnome-shell/3.32/sass/_colors.scss
+    # sed -i 's/center top/0px 0px/' ${_pkgname}/common/gnome-shell/3.32/sass/_common.scss
 }
 
 build() {
     cd ${_pkgname}
-    ./autogen.sh --prefix=/usr --with-gnome-shell=3.32 --disable-darker --disable-dark --disable-cinnamon --disable-metacity --disable-unity --disable-xfwm --disable-plank --disable-openbox
+    ./autogen.sh --prefix=/usr --with-gnome-shell=3.32 --disable-light --disable-darker --disable-cinnamon --disable-metacity --disable-unity --disable-xfwm --disable-plank --disable-openbox
 }
 
 package() {
