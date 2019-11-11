@@ -13,7 +13,7 @@ replaces=('arc-gtk-theme' 'gtk-theme-arc')
 provides=('arc-gtk-theme')
 conflicts=('arc-gtk-theme')
 pkgver=$(date +%Y%m%d)
-pkgrel=11
+pkgrel=15
 groups=('mypkgs')
 arch=('any')
 url="https://github.com/arc-design/arc-theme"
@@ -28,9 +28,13 @@ source=("git+${url}")
 sha512sums=('SKIP')
 
 prepare() {
-    find ./${_pkgname}/common/ -type f -exec sed -i'' -e 's/#5294e2/#ff3333/gI'  {} \; ;
+    find ./${_pkgname}/ -type f -exec sed -i'' -e 's/#5294e2/#ff3333/gI'  {} \; ;
     # sed -i 's/#5294e2/#ff3333/gI' ${_pkgname}/common/gnome-shell/3.32/sass/_colors.scss
     # sed -i 's/center top/0px 0px/' ${_pkgname}/common/gnome-shell/3.32/sass/_common.scss
+
+    # TODO: FIX LIne 771 col 24
+    # sed -i '/newbackground/a \ \ background-position: 0px 0px;' gnome-shell.css 
+    # sed -i '/newbackground/a \ \ background-attachment: fixed;' gnome-shell.css 
 }
 
 build() {
